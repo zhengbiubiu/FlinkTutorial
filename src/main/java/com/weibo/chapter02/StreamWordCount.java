@@ -1,6 +1,5 @@
 package com.weibo.chapter02;
 
-import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -9,17 +8,13 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
-public class BoundedStreamWordCount {
+public class StreamWordCount {
     public static void main(String[] args) throws Exception {
         // 1.创建流式执行环境
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        // 指定batch模式（默认stream模式，可选auto）
-        env.setRuntimeMode(RuntimeExecutionMode.BATCH);
-//        env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
-        env.setParallelism(1);
 
         // 2.读取文件
-        DataStreamSource<String> lineDS = env.readTextFile("input/words.txt");
+        DataStreamSource<String> lineDS = env.socketTextStream("192.168.0.108",9995);
 
         // 3.转换数据格式
         SingleOutputStreamOperator<Tuple2<String, Long>> wordAndOne =
@@ -42,4 +37,5 @@ public class BoundedStreamWordCount {
         // 7.执行
         env.execute();
     }
+    // 发送命令: nc -lk 9995
 }
