@@ -1,6 +1,7 @@
 package com.weibo.source;
 
 import com.weibo.pojo.Event;
+import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.ParallelSourceFunction;
@@ -17,7 +18,7 @@ public class SourceCustomizeTest  {
     /**
      * SourceFunction接口定义的数据源并行度只能设置为1，如果设置大于1会报错
      */
-    static class CustomSource1 implements SourceFunction<Event>{
+    public static class CustomSource1 implements SourceFunction<Event>{
         // 声明一个布尔变量，作为控制数据生成的标识位
         private Boolean running = true;
 
